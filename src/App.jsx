@@ -55,6 +55,7 @@ const App = () => {
     return (
       <div style={{ textAlign: "center", padding: "20px" }}>
         <h2>Glückwunsch! Du hast alle Aufgaben gemeistert!</h2>
+        <p>Gesamtzahl der Aufgaben: {questions.length}</p>
         <p>Fehler: {errors}</p>
         <p>Zeit: {totalTime} Sekunden</p>
         <button onClick={restartGame}>Noch einmal spielen</button>
@@ -63,14 +64,15 @@ const App = () => {
   }
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
+    <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto" }}>
       {currentQuestion && <h2>{currentQuestion[0]} × {currentQuestion[1]} = ?</h2>}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px", maxWidth: "300px", margin: "auto" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(60px, 1fr))", gap: "10px" }}>
         {uniqueResults.map((result) => (
           <button key={result} onClick={() => handleAnswer(result)} style={{ padding: "10px", fontSize: "18px" }}>{result}</button>
         ))}
       </div>
       <p>Fehler: {errors}</p>
+      <p>Verbleibende Aufgaben: {remainingQuestions.length}</p>
     </div>
   );
 };
