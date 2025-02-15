@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { motion } from "framer-motion";
 
 const questions = [
   [3, 3, 9], [3, 4, 12], [3, 5, 15], [3, 6, 18], [3, 7, 21], [3, 8, 24], [3, 9, 27],
@@ -15,7 +12,7 @@ const questions = [
 
 const uniqueResults = [...new Set(questions.map(q => q[2]))].sort((a, b) => a - b);
 
-const MultiplicationTrainer = () => {
+const App = () => {
   const [remainingQuestions, setRemainingQuestions] = useState(questions);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [correctCount, setCorrectCount] = useState({});
@@ -56,34 +53,26 @@ const MultiplicationTrainer = () => {
   if (gameOver) {
     const totalTime = Math.floor((Date.now() - startTime) / 1000);
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen text-center p-4">
-        <h2 className="text-2xl font-bold mb-4">Glückwunsch! Du hast alle Aufgaben gemeistert!</h2>
-        <p className="mb-2">Fehler: {errors}</p>
-        <p className="mb-4">Zeit: {totalTime} Sekunden</p>
-        <Button onClick={restartGame}>Noch einmal spielen</Button>
+      <div style={{ textAlign: "center", padding: "20px" }}>
+        <h2>Glückwunsch! Du hast alle Aufgaben gemeistert!</h2>
+        <p>Fehler: {errors}</p>
+        <p>Zeit: {totalTime} Sekunden</p>
+        <button onClick={restartGame}>Noch einmal spielen</button>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      {currentQuestion && (
-        <Card className="p-4 mb-4 text-center w-full max-w-md">
-          <CardContent>
-            <h2 className="text-2xl font-bold">{currentQuestion[0]} × {currentQuestion[1]} = ?</h2>
-          </CardContent>
-        </Card>
-      )}
-      <div className="grid grid-cols-4 gap-2">
+    <div style={{ textAlign: "center", padding: "20px" }}>
+      {currentQuestion && <h2>{currentQuestion[0]} × {currentQuestion[1]} = ?</h2>}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px", maxWidth: "300px", margin: "auto" }}>
         {uniqueResults.map((result) => (
-          <motion.div whileTap={{ scale: 0.9 }} key={result}>
-            <Button onClick={() => handleAnswer(result)} className="w-full py-2 text-lg">{result}</Button>
-          </motion.div>
+          <button key={result} onClick={() => handleAnswer(result)} style={{ padding: "10px", fontSize: "18px" }}>{result}</button>
         ))}
       </div>
-      <p className="mt-4">Fehler: {errors}</p>
+      <p>Fehler: {errors}</p>
     </div>
   );
 };
 
-export default MultiplicationTrainer;
+export default App;
