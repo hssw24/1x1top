@@ -79,8 +79,8 @@ const App = () => {
   }
 
   return (
-    <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto", backgroundColor: wrongAnswer ? "red" : "white", transition: "background-color 0.5s" }}>
-      {currentQuestion ? <h2>{currentQuestion[0]} × {currentQuestion[1]} = ?</h2> : <h2>Alle Aufgaben abgeschlossen!</h2>}
+    <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", backgroundColor: wrongAnswer ? "red" : "white", transition: "background-color 0.5s" }}>
+      <h2>{currentQuestion ? `${currentQuestion[0]} × ${currentQuestion[1]} = ?` : "Alle Aufgaben abgeschlossen!"}</h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "10px", width: "100%", minHeight: "200px" }}>
         {uniqueResults.map((result) => (
           <button key={result} onClick={() => handleAnswer(result)} disabled={wrongAnswer} style={{ minWidth: "60px", width: "100%", padding: "15px", fontSize: "18px", backgroundColor: "#28a745", color: "white", border: "none", borderRadius: "5px" }}>{result}</button>
