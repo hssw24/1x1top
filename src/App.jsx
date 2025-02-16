@@ -19,7 +19,6 @@ const App = () => {
   const [excludedQuestions, setExcludedQuestions] = useState([]);
   const [correctCount, setCorrectCount] = useState({});
   const [startTime, setStartTime] = useState(Date.now());
-  const [wrongAnswer, setWrongAnswer] = useState(false);
 
   useEffect(() => {
     getNewQuestion();
@@ -39,11 +38,6 @@ const App = () => {
     const correctAnswer = currentQuestion[2];
     if (answer !== correctAnswer) {
       setLog([...log, { question: `${currentQuestion[0]} × ${currentQuestion[1]}`, wrong: answer, correct: correctAnswer }]);
-      setWrongAnswer(true);
-      setTimeout(() => {
-        setWrongAnswer(false);
-        getNewQuestion();
-      }, 2000);
     } else {
       const updatedCount = { ...correctCount, [correctAnswer]: (correctCount[correctAnswer] || 0) + 1 };
       setCorrectCount(updatedCount);
@@ -52,8 +46,8 @@ const App = () => {
         setExcludedQuestions([...excludedQuestions, currentQuestion]);
         setRemainingQuestions(remainingQuestions.filter(q => q[2] !== correctAnswer));
       }
-      getNewQuestion();
     }
+    getNewQuestion();
   };
 
   const resetGame = () => {
@@ -62,7 +56,6 @@ const App = () => {
     setExcludedQuestions([]);
     setCorrectCount({});
     setStartTime(Date.now());
-    setWrongAnswer(false);
   };
 
   if (remainingQuestions.length === 0) {
@@ -79,11 +72,11 @@ const App = () => {
   }
 
   return (
-    <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto", backgroundColor: wrongAnswer ? "red" : "white", transition: "background-color 0.5s" }}>
+    <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto" }}>
       {currentQuestion ? <h2>{currentQuestion[0]} × {currentQuestion[1]} = ?</h2> : <h2>Alle Aufgaben abgeschlossen!</h2>}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "10px", width: "100%", minHeight: "200px" }}>
         {uniqueResults.map((result) => (
-          <button key={result} onClick={() => handleAnswer(result)} disabled={wrongAnswer} style={{ minWidth: "60px", width: "100%", padding: "15px", fontSize: "18px", backgroundColor: "#28a745", color: "white", border: "none", borderRadius: "5px" }}>{result}</button>
+          <button key={result} onClick={() => handleAnswer(result)} style={{ minWidth: "60px", width: "100%", padding: "15px", fontSize: "18px", backgroundColor: "#28a745", color: "white", border: "none", borderRadius: "5px" }}>{result}</button>
         ))}
       </div>
       <h3>Fehlerversuche:</h3>
