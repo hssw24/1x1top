@@ -68,7 +68,7 @@ const App = () => {
   if (remainingQuestions.length === 0) {
     const totalTime = ((Date.now() - startTime) / 1000).toFixed(2);
     return (
-      <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto", color: "black" }}>
+      <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto", color: "white", backgroundColor: "black", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center" }}>
         <h2>Rechenspiel beendet!</h2>
         <p>Aufgaben gerechnet: {questions.length}</p>
         <p>Fehlerversuche: {log.length}</p>
