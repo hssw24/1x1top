@@ -74,7 +74,7 @@ const App = () => {
   return (
     <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto" }}>
       {currentQuestion ? <h2>{currentQuestion[0]} × {currentQuestion[1]} = ?</h2> : <h2>Alle Aufgaben abgeschlossen!</h2>}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "10px", justifyContent: "center" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px", justifyContent: "center" }}>
         {uniqueResults.map((result) => (
           <button key={result} onClick={() => handleAnswer(result)} style={{ padding: "10px", fontSize: "18px", backgroundColor: "#28a745", color: "white", border: "none", borderRadius: "5px" }}>{result}</button>
         ))}
@@ -86,7 +86,11 @@ const App = () => {
         ))}
       </ul>
       <h3>Abgeschlossene Aufgaben:</h3>
-      <p>{excludedQuestions.map(entry => `${entry[0]} × ${entry[1]} = ${entry[2]}`).join(', ')}</p>
+      <ul>
+        {excludedQuestions.map((entry, index) => (
+          <li key={index}>{entry[0]} × {entry[1]} = {entry[2]}</li>
+        ))}
+      </ul>
     </div>
   );
 };
