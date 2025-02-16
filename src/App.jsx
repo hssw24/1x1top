@@ -15,64 +15,82 @@ const uniqueResults = [...new Set(questions.map(q => q[2]))].sort((a, b) => a - 
 const App = () => {
   const [remainingQuestions, setRemainingQuestions] = useState(questions);
   const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [log, setLog] = useState([]);
+  const [excludedQuestions, setExcludedQuestions] = useState([]);
   const [correctCount, setCorrectCount] = useState({});
-  const [errors, setErrors] = useState(0);
   const [startTime, setStartTime] = useState(Date.now());
-  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
-    if (remainingQuestions.length > 0) {
-      setCurrentQuestion(remainingQuestions[Math.floor(Math.random() * remainingQuestions.length)]);
-    } else {
-      setGameOver(true);
-    }
+    getNewQuestion();
   }, [remainingQuestions]);
+
+  const getNewQuestion = () => {
+    if (remainingQuestions.length === 0) {
+      setCurrentQuestion(null);
+      return;
+    }
+    const newQuestion = remainingQuestions[Math.floor(Math.random() * remainingQuestions.length)];
+    setCurrentQuestion(newQuestion);
+  };
 
   const handleAnswer = (answer) => {
     if (!currentQuestion) return;
     const correctAnswer = currentQuestion[2];
-    if (answer === correctAnswer) {
-      const count = correctCount[correctAnswer] ? correctCount[correctAnswer] + 1 : 1;
-      if (count >= 3) {
+    if (answer !== correctAnswer) {
+      setLog([...log, { question: `${currentQuestion[0]} × ${currentQuestion[1]}`, wrong: answer, correct: correctAnswer }]);
+    } else {
+      const updatedCount = { ...correctCount, [correctAnswer]: (correctCount[correctAnswer] || 0) + 1 };
+      setCorrectCount(updatedCount);
+      
+      if (updatedCount[correctAnswer] >= 2) {
+        setExcludedQuestions([...excludedQuestions, currentQuestion]);
         setRemainingQuestions(remainingQuestions.filter(q => q[2] !== correctAnswer));
       }
-      setCorrectCount({ ...correctCount, [correctAnswer]: count });
-    } else {
-      setErrors(errors + 1);
     }
+    getNewQuestion();
   };
 
-  const restartGame = () => {
+  const resetGame = () => {
     setRemainingQuestions(questions);
+    setLog([]);
+    setExcludedQuestions([]);
     setCorrectCount({});
-    setErrors(0);
     setStartTime(Date.now());
-    setGameOver(false);
   };
 
-  if (gameOver) {
-    const totalTime = Math.floor((Date.now() - startTime) / 1000);
+  if (remainingQuestions.length === 0) {
+    const totalTime = ((Date.now() - startTime) / 1000).toFixed(2);
     return (
-      <div style={{ textAlign: "center", padding: "20px" }}>
-        <h2>Glückwunsch! Du hast alle Aufgaben gemeistert!</h2>
-        <p>Gesamtzahl der Aufgaben: {questions.length}</p>
-        <p>Fehler: {errors}</p>
-        <p>Zeit: {totalTime} Sekunden</p>
-        <button onClick={restartGame}>Noch einmal spielen</button>
+      <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto" }}>
+        <h2>Rechenspiel beendet!</h2>
+        <p>Aufgaben gerechnet: {questions.length}</p>
+        <p>Fehlerversuche: {log.length}</p>
+        <p>Benötigte Zeit: {totalTime} Sekunden</p>
+        <button onClick={resetGame} style={{ padding: "10px", fontSize: "18px" }}>Noch einmal spielen</button>
       </div>
     );
   }
 
   return (
     <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto" }}>
-      {currentQuestion && <h2>{currentQuestion[0]} × {currentQuestion[1]} = ?</h2>}
+      {currentQuestion ? <h2>{currentQuestion[0]} × {currentQuestion[1]} = ?</h2> : <h2>Alle Aufgaben abgeschlossen!</h2>}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(60px, 1fr))", gap: "10px" }}>
         {uniqueResults.map((result) => (
           <button key={result} onClick={() => handleAnswer(result)} style={{ padding: "10px", fontSize: "18px" }}>{result}</button>
         ))}
       </div>
-      <p>Fehler: {errors}</p>
-      <p>Verbleibende Aufgaben: {remainingQuestions.length}</p>
+      <h3>Fehlerversuche:</h3>
+      <ul>
+        {log.map((entry, index) => (
+          <li key={index}>{entry.question}: Falsch: {entry.wrong}, Richtig: {entry.correct}</li>
+        ))}
+      </ul>
+      <h3>Abgeschlossene Aufgaben:</h3>
+      <ul>
+        {excludedQuestions.map((entry, index) => (
+          <li key={index}>{entry[0]} × {entry[1]} = {entry[2]}</li>
+        ))}
+      </ul>
     </div>
   );
 };
