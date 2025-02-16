@@ -68,7 +68,7 @@ const App = () => {
   if (remainingQuestions.length === 0) {
     const totalTime = ((Date.now() - startTime) / 1000).toFixed(2);
     return (
-      <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto" }}>
+      <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto", color: "black" }}>
         <h2>Rechenspiel beendet!</h2>
         <p>Aufgaben gerechnet: {questions.length}</p>
         <p>Fehlerversuche: {log.length}</p>
@@ -79,7 +79,7 @@ const App = () => {
   }
 
   return (
-    <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", backgroundColor: wrongAnswer ? "red" : "white", transition: "background-color 0.5s" }}>
+    <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", backgroundColor: wrongAnswer ? "red" : "white", color: wrongAnswer ? "white" : "black", transition: "background-color 0.5s, color 0.5s" }}>
       <h2>{currentQuestion ? `${currentQuestion[0]} × ${currentQuestion[1]} = ?` : "Alle Aufgaben abgeschlossen!"}</h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "10px", width: "100%", minHeight: "200px" }}>
         {uniqueResults.map((result) => (
