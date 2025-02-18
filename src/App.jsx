@@ -70,8 +70,9 @@ const App = () => {
     return (
       <div style={{ textAlign: "center", padding: "20px", maxWidth: "400px", margin: "auto", color: "white", backgroundColor: "black", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center" }}>
         <h2>Rechenspiel beendet!</h2>
+        <p>Für  ♥ GS Afferde ♥  von hssw</p>
         <p>Aufgaben gerechnet: {questions.length}</p>
-        <p>Fehlerversuche: {log.length}</p>
+        <p>Fehler: {log.length}</p>
         <p>Benötigte Zeit: {totalTime} Sekunden</p>
         <button onClick={resetGame} style={{ width: "100%", padding: "10px", fontSize: "18px", backgroundColor: "#007bff", color: "white", border: "none", borderRadius: "5px" }}>Noch einmal spielen</button>
       </div>
